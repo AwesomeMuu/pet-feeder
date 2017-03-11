@@ -29,15 +29,15 @@ import html2text
 from Adafruit_CharLCD import Adafruit_CharLCD as LCD
 
 # pin configuration and 16x2 setup. Pin numbers are (BCM)
-lcd_rs        = 27
-lcd_en        = 22
-lcd_d4        = 25
-lcd_d5        = 24
-lcd_d6        = 23
-lcd_d7        = 18
-lcd_backlight = 4
-lcd_columns   = 16
-lcd_rows      = 2
+# lcd_rs        = 27
+# lcd_en        = 22
+# lcd_d4        = 25
+# lcd_d5        = 24
+# lcd_d6        = 23
+# lcd_d7        = 18
+# lcd_backlight = 4
+# lcd_columns   = 16
+# lcd_rows      = 2
 
 
 
@@ -168,10 +168,10 @@ def remotefeedrequest():
 def printlcd(row, col, LCDmesg):
     # Set the row and column for the LCD and print the message
     global logFile
-    global lcd
-
-    lcd.setCursor(row, col)
-    lcd.message(LCDmesg)
+    # global lcd
+    #
+    # lcd.setCursor(row, col)
+    # lcd.message(LCDmesg)
 
 
 def feednow():
@@ -182,13 +182,13 @@ def feednow():
     global lastFeed
     global GMAILUSER
 
-    lcd.clear()
-    printlcd(0,0,"Feeding now.....")
+    # lcd.clear()
+    # printlcd(0,0,"Feeding now.....")
     if MOTORON:
         GPIO.output(MOTORCONTROLPIN, True)
         time.sleep(motorTime)
         GPIO.output(MOTORCONTROLPIN, False)
-        printlcd(0,1, "Done!")
+        # printlcd(0,1, "Done!")
         sendemail(GMAILUSER, "Fed at " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(lastFeed)), "Feeding done!")
         time.sleep(2)
     return time.time()
@@ -248,16 +248,16 @@ try:
 
         #### If reset button pressed, then reset the counter
         if buttonpressed(RESETBUTTONPIN):
-            lcd.clear()
-            printlcd(0,0, "Resetting...   ")
+            # lcd.clear()
+            # printlcd(0,0, "Resetting...   ")
             time.sleep(2)
             lastFeed = time.time() - feedInterval + 5
             saveLastFeed()
 
         #### Check if we are ready to feed
         if (time.time() - lastFeed) > feedInterval:
-            printlcd(0,0, time.strftime("%m/%d %I:%M:%S%P", time.localtime(time.time())))
-            printlcd(0,1, "Ready to feed   ")
+            # printlcd(0,0, time.strftime("%m/%d %I:%M:%S%P", time.localtime(time.time())))
+            # printlcd(0,1, "Ready to feed   ")
 
             #### See if the button is pressed
             if buttonpressed(FEEDBUTTONPIN):
@@ -272,23 +272,23 @@ try:
         #### Since it is not time to feed yet, keep the countdown going
         else:
             timeToFeed = (lastFeed + feedInterval) - time.time()
-            printlcd(0,0, time.strftime("%m/%d %I:%M:%S%P", time.localtime(time.time())))
-            printlcd(0,1, 'Next:' + time.strftime("%Hh %Mm %Ss", time.gmtime(timeToFeed)))
+            #printlcd(0,0, time.strftime("%m/%d %I:%M:%S%P", time.localtime(time.time())))
+            #printlcd(0,1, 'Next:' + time.strftime("%Hh %Mm %Ss", time.gmtime(timeToFeed)))
             checkmail()
             if buttonpressed(FEEDBUTTONPIN):
-                lcd.clear()
-                printlcd(0,0, "Not now, try at ")
-                printlcd(0,1, time.strftime("%b/%d %H:%M", time.localtime(lastFeed + feedInterval)))
+            #    lcd.clear()
+            #    printlcd(0,0, "Not now, try at ")
+            #    printlcd(0,1, time.strftime("%b/%d %H:%M", time.localtime(lastFeed + feedInterval)))
                 time.sleep(2)
         time.sleep(.6)
 
 #### Cleaning up at the end
 except KeyboardInterrupt:
     logFile.close()
-    lcd.clear()
+    #lcd.clear()
     GPIO.cleanup()
 
 except SystemExit:
     logFile.close()
-    lcd.clear()
+    #lcd.clear()
     GPIO.cleanup()
