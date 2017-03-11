@@ -100,8 +100,8 @@ def checkmail():
                     msgBody = msgBody + "\nThe next feeding can begin on " + time.strftime("%b %d at %I:%M %P", time.localtime(lastFeed + feedInterval))
 
                 sendemail(fromAddress, "Thanks for your feeding query", msgBody)
-                server.add_flags(whenMessages, [SEEN])
-
+                # server.add_flags(whenMessages, [SEEN])
+                server.store(whenMessages, '+FLAGS', '\\Seen')
 
         # See if there are any messages with subject "Feed" that are unread
         feedMessages = server.search([u'UNSEEN', u'SUBJECT', u'Feed'])
