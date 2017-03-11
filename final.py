@@ -67,7 +67,7 @@ RESETBUTTONPIN = 13
 # Variables for feeding information
 readyToFeed = False # not used now but for future use
 feedInterval = 28800 # This translates to 8 hours in seconds
-FEEDFILE="/home/pi/Desktop/pet-feeder/lastfeed.txt"
+FEEDFILE="/home/pi/pet-feeder/lastfeed.txt"
 cupsToFeed = 1
 motorTime = cupsToFeed * 27 # It takes 27 seconds of motor turning (~1.75 rotations) to get 1 cup of feed
 
@@ -97,7 +97,7 @@ def checkmail():
                     msgBody = msgBody + "\nReady to feed now!"
                 else:
                     msgBody = msgBody + "\nThe next feeding can begin on " + time.strftime("%b %d at %I:%M %P", time.localtime(lastFeed + feedInterval))
-        
+
                 sendemail(fromAddress, "Thanks for your feeding query", msgBody)
                 server.add_flags(whenMessages, [SEEN])
 
