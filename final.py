@@ -224,7 +224,7 @@ try:
 
     # Initialize the pin for the motor control
     GPIO.setup(MOTORCONTROLPIN, GPIO.OUT)
-    GPIO.output(MOTORCONTROLPIN, GPIO.HIGH)
+    GPIO.output(MOTORCONTROLPIN, GPIO.LOW)
 
     # Initialize the pin for the feed and reset buttons
     GPIO.setup(FEEDBUTTONPIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
