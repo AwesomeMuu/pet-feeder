@@ -89,7 +89,7 @@ def checkmail():
         # Respond to the when messages
         if whenMessages:
             for msg in whenMessages:
-                msginfo = server.fetch([msg], ['BODY[HEADER.FIELDS (FROM)]'])
+                msginfo = server.fetch(msg, '(RFC822)')
                 fromAddress = str(msginfo[msg].get('BODY[HEADER.FIELDS (FROM)]')).split('<')[1].split('>')[0]
                 msgBody = "The last feeding was done on " + time.strftime("%b %d at %I:%M %P", time.localtime(lastFeed))
 
