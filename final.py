@@ -84,14 +84,16 @@ def checkmail():
         server.select(MAILBOX)
 
         # See if there are any messages with subject "When" that are unread
-        
-	whenMessages = server.search(None, '(SUBJECT "When" UNSEEN)')
+
+        # whenMessages = server.search([u'UNSEEN', u'SUBJECT', u'When'])
+	    type, whenMessages = server.search(None, '(SUBJECT "When" UNSEEN)')
         # Respond to the when messages
         if whenMessages:
             for msg in whenMessages:
-                # msginfo = server.fetch([msg], ['BODY[HEADER.FIELDS (FROM)]'])
-                # fromAddress = str(msginfo[msg].get('BODY[HEADER.FIELDS (FROM)]')).split('<')[1].split('>')[0]
-                fromAddress = GMAILUSER
+                msginfo = server.fetch([msg], ['BODY[HEADER.FIELDS (FROM)]'])
+                fromAddress = str(msginfo[msg].get('BODY[HEADER.FIELDS (FROM)]')).split('<')[1].split('>')[0]
+                # fromAddress = GMAILUSER
+
                 msgBody = "The last feeding was done on " + time.strftime("%b %d at %I:%M %P", time.localtime(lastFeed))
 
                 if (time.time() - lastFeed) > feedInterval:
@@ -100,18 +102,19 @@ def checkmail():
                     msgBody = msgBody + "\nThe next feeding can begin on " + time.strftime("%b %d at %I:%M %P", time.localtime(lastFeed + feedInterval))
 
                 sendemail(fromAddress, "Thanks for your feeding query", msgBody)
-                # server.add_flags(whenMessages, [SEEN])
-                server.store(msg, '+FLAGS', '\Seen')
+                server.add_flags(whenMessages, [SEEN])
+                # server.store(msg, '+FLAGS', '\Seen')
 
         # See if there are any messages with subject "Feed" that are unread
-        feedMessages = server.search([u'UNSEEN', u'SUBJECT', u'Feed'])
+        # feedMessages = server.search([u'UNSEEN', u'SUBJECT', u'Feed'])
+        type, feedMessages = server.search(None, '(SUBJECT "Feed" UNSEEN)')
 
         # Respond to the feed messages and then exit
         if feedMessages:
             for msg in feedMessages:
-                # msginfo = server.fetch([msg], ['BODY[HEADER.FIELDS (FROM)]'])
-                # fromAddress = str(msginfo[msg].get('BODY[HEADER.FIELDS (FROM)]')).split('<')[1].split('>')[0]
-                fromAddress = GMAILUSER
+                msginfo = server.fetch([msg], ['BODY[HEADER.FIELDS (FROM)]'])
+                fromAddress = str(msginfo[msg].get('BODY[HEADER.FIELDS (FROM)]')).split('<')[1].split('>')[0]
+                # fromAddress = GMAILUSER
                 msgBody = "The last feeding was done at " + time.strftime("%b %d at %I:%M %P", time.localtime(lastFeed))
                 if (time.time() - lastFeed) > feedInterval:
                     msgBody = msgBody + "\nReady to be fed, will be feeding Lucky shortly"
