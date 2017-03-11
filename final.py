@@ -53,7 +53,7 @@ LOGFILE = "/tmp/petfeeder.log"
 # Variables for checking email
 GMAILHOSTNAME = 'imap.gmail.com' # Insert your mailserver here - Gmail uses 'imap.gmail.com'
 MAILBOX = 'Inbox' # Insert the name of your mailbox. Gmail uses 'Inbox'
-GMAILUSER = 'pet.feedersp17@gmail.com' # Insert your email username
+GMAILUSER = 'pets.feedersp17@gmail.com' # Insert your email username
 GMAILPASSWD = 'Spring17'# Insert your email password
 NEWMAIL_OFFSET = 0
 lastEmailCheck = time.time()
@@ -69,7 +69,7 @@ readyToFeed = False # not used now but for future use
 feedInterval = 28800 # This translates to 8 hours in seconds
 FEEDFILE="/home/pi/pet-feeder/lastfeed.txt"
 cupsToFeed = 1
-motorTime = cupsToFeed * 27 # It takes 27 seconds of motor turning (~1.75 rotations) to get 1 cup of feed
+motorTime = cupsToFeed * 4 # It takes 27 seconds of motor turning (~1.75 rotations) to get 1 cup of feed
 
 # Function to check email
 def checkmail():
@@ -100,6 +100,7 @@ def checkmail():
 
                 sendemail(fromAddress, "Thanks for your feeding query", msgBody)
                 server.add_flags(whenMessages, [SEEN])
+
 
         # See if there are any messages with subject "Feed" that are unread
         feedMessages = server.search([u'UNSEEN', u'SUBJECT', u'Feed'])
@@ -222,8 +223,8 @@ try:
     GPIO.setmode(GPIO.BCM)
 
     # Initialize the pin for the motor control
-    GPIO.setup(23, GPIO.OUT)
-    GPIO.output(23, GPIO.HIGH)
+    GPIO.setup(MOTORCONTROLPIN, GPIO.OUT)
+    GPIO.output(MOTORCONTROLPIN, GPIO.HIGH)
 
     # Initialize the pin for the feed and reset buttons
     GPIO.setup(FEEDBUTTONPIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
