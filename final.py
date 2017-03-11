@@ -57,7 +57,7 @@ GMAILUSER = 'pets.feedersp17@gmail.com' # Insert your email username
 GMAILPASSWD = 'Spring17'# Insert your email password
 NEWMAIL_OFFSET = 0
 lastEmailCheck = time.time()
-MAILCHECKDELAY = 30  # Don't check email too often since Gmail will complain
+MAILCHECKDELAY = 10  # Don't check email too often since Gmail will complain
 
 # GPIO pins for feeder control
 MOTORCONTROLPIN = 19
@@ -79,7 +79,7 @@ def checkmail():
 
     if (time.time() > (lastEmailCheck + MAILCHECKDELAY)):  # Make sure that that atleast MAILCHECKDELAY time has passed
         lastEmailCheck = time.time()
-        server = imaplib(GMAILHOSTNAME, use_uid=True, ssl=True)  # Create the server class from IMAPClient with HOSTNAME mail server
+        server = imaplib.IMAP4_SSL(GMAILHOSTNAME)  # Create the server class from IMAPClient with HOSTNAME mail server
         server.login(GMAILUSER, GMAILPASSWD)
         server.select_folder(MAILBOX)
 
