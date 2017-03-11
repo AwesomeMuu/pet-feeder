@@ -54,7 +54,7 @@ LOGFILE = "/tmp/petfeeder.log"
 GMAILHOSTNAME = 'imap.gmail.com' # Insert your mailserver here - Gmail uses 'imap.gmail.com'
 MAILBOX = 'Inbox' # Insert the name of your mailbox. Gmail uses 'Inbox'
 GMAILUSER = 'pets.feedersp17@gmail.com' # Insert your email username
-GMAILPASSWD = 'Spring17'# Insert your email password
+GMAILPASSWD = 'Spring17' # Insert your email password
 NEWMAIL_OFFSET = 0
 lastEmailCheck = time.time()
 MAILCHECKDELAY = 10  # Don't check email too often since Gmail will complain
@@ -81,7 +81,7 @@ def checkmail():
         lastEmailCheck = time.time()
         server = imaplib.IMAP4_SSL(GMAILHOSTNAME)  # Create the server class from IMAPClient with HOSTNAME mail server
         server.login(GMAILUSER, GMAILPASSWD)
-        server.select_folder(MAILBOX)
+        server.select(MAILBOX)
 
         # See if there are any messages with subject "When" that are unread
         whenMessages = server.search([u'UNSEEN', u'SUBJECT', u'When'])
