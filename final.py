@@ -89,8 +89,8 @@ def checkmail():
         # Respond to the when messages
         if whenMessages:
             for msg in whenMessages:
-                msginfo = server.fetch(msg, '(RFC822)')
-                fromAddress = str(msginfo[msg].get('BODY[HEADER.FIELDS (FROM)]')).split('<')[1].split('>')[0]
+                # msginfo = server.fetch([msg], ['BODY[HEADER.FIELDS (FROM)]'])
+                # fromAddress = str(msginfo[msg].get('BODY[HEADER.FIELDS (FROM)]')).split('<')[1].split('>')[0]
                 msgBody = "The last feeding was done on " + time.strftime("%b %d at %I:%M %P", time.localtime(lastFeed))
 
                 if (time.time() - lastFeed) > feedInterval:
@@ -108,8 +108,8 @@ def checkmail():
         # Respond to the feed messages and then exit
         if feedMessages:
             for msg in feedMessages:
-                msginfo = server.fetch([msg], ['BODY[HEADER.FIELDS (FROM)]'])
-                fromAddress = str(msginfo[msg].get('BODY[HEADER.FIELDS (FROM)]')).split('<')[1].split('>')[0]
+                # msginfo = server.fetch([msg], ['BODY[HEADER.FIELDS (FROM)]'])
+                # fromAddress = str(msginfo[msg].get('BODY[HEADER.FIELDS (FROM)]')).split('<')[1].split('>')[0]
 
                 msgBody = "The last feeding was done at " + time.strftime("%b %d at %I:%M %P", time.localtime(lastFeed))
                 if (time.time() - lastFeed) > feedInterval:
