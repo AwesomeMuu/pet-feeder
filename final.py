@@ -86,12 +86,27 @@ def checkmail():
         # See if there are any messages with subject "When" that are unread
 
         # whenMessages = server.search([u'UNSEEN', u'SUBJECT', u'When'])
-	    type, whenMessages = server.search(None, '(SUBJECT "When" UNSEEN)')
+
+        type, whenMessages = server.search(None, '(SUBJECT "When" UNSEEN)')
+
+        for i in range(latest_email_id,first_email_id, -1):
+            typ, data = mail.fetch(i, '(RFC822)' )
+
+            for response_part in data:
+                if isinstance(response_part, tuple):
+                    time.sleep(3)
+                    msg = email.message_from_string(response_part[1])
+                    email_subject = msg['subject']
+                    print 'Subject : ' + email_subject + '\n'
+
+
         # Respond to the when messages
-        if whenMessages:
+        if email_subject == "When":
             for msg in whenMessages:
-                msginfo = server.fetch([msg], ['BODY[HEADER.FIELDS (FROM)]'])
-                fromAddress = str(msginfo[msg].get('BODY[HEADER.FIELDS (FROM)]')).split('<')[1].split('>')[0]
+                # msginfo = server.fetch([msg], ['BODY[HEADER.FIELDS (FROM)]'])
+                # fromAddress = str(msginfo[msg].get('BODY[HEADER.FIELDS (FROM)]')).split('<')[1].split('>')[0]
+                typ, data = server.fetch(msg, '(RFC822)' )
+
                 # fromAddress = GMAILUSER
 
                 msgBody = "The last feeding was done on " + time.strftime("%b %d at %I:%M %P", time.localtime(lastFeed))
