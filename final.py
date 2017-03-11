@@ -197,7 +197,7 @@ def saveLastFeed():
     global FEEDFILE
     global lastFeed
     with open(FEEDFILE, 'w') as feedFile:
-        feedFile.write(str(lastFeed))
+        feedFile.write(float(lastFeed))
     feedFile.close()
 
 
