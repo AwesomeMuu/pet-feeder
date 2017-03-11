@@ -67,7 +67,7 @@ RESETBUTTONPIN = 13
 # Variables for feeding information
 readyToFeed = False # not used now but for future use
 feedInterval = 28800 # This translates to 8 hours in seconds
-FEEDFILE="/home/pi/Desktop/petfeeder/lastfeed"
+FEEDFILE="/home/pi/Desktop/pet-feeder/lastfeed.txt"
 cupsToFeed = 1
 motorTime = cupsToFeed * 27 # It takes 27 seconds of motor turning (~1.75 rotations) to get 1 cup of feed
 
@@ -211,7 +211,7 @@ try:
     logFile = open(LOGFILE, 'a')
 
     # Initialize the LCD
-   # lcd = Adafruit_CharLCD()
+    # lcd = Adafruit_CharLCD()
     #lcd.begin(16,2)
     #lcd.clear()
 
