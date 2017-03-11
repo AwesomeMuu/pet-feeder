@@ -101,7 +101,7 @@ def checkmail():
 
                 sendemail(fromAddress, "Thanks for your feeding query", msgBody)
                 # server.add_flags(whenMessages, [SEEN])
-                server.store(whenMessages, '+FLAGS', '\\Seen')
+                server.store(msg, '+FLAGS', '\\Seen')
 
         # See if there are any messages with subject "Feed" that are unread
         feedMessages = server.search([u'UNSEEN', u'SUBJECT', u'Feed'])
