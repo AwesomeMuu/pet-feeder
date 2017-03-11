@@ -84,8 +84,8 @@ def checkmail():
         server.select(MAILBOX)
 
         # See if there are any messages with subject "When" that are unread
-        whenMessages = server.search([u'UNSEEN', u'SUBJECT', u'When'])
-
+        
+	whenMessages = server.search(None, '(SUBJECT "When" UNSEEN)')
         # Respond to the when messages
         if whenMessages:
             for msg in whenMessages:
