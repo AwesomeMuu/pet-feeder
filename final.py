@@ -29,7 +29,7 @@ import html2text
 from Adafruit_CharLCD import Adafruit_CharLCD as LCD
 
 # pin configuration and 16x2 setup. Pin numbers are (BCM)
-lcd_rs        = 27  
+lcd_rs        = 27
 lcd_en        = 22
 lcd_d4        = 25
 lcd_d5        = 24
@@ -53,8 +53,8 @@ LOGFILE = "/tmp/petfeeder.log"
 # Variables for checking email
 GMAILHOSTNAME = 'imap.gmail.com' # Insert your mailserver here - Gmail uses 'imap.gmail.com'
 MAILBOX = 'Inbox' # Insert the name of your mailbox. Gmail uses 'Inbox'
-GMAILUSER = 'ali.latyf' # Insert your email username
-GMAILPASSWD = '1234'# Insert your email password
+GMAILUSER = 'pet.feedersp17@gmail.com' # Insert your email username
+GMAILPASSWD = 'Spring17'# Insert your email password
 NEWMAIL_OFFSET = 0
 lastEmailCheck = time.time()
 MAILCHECKDELAY = 30  # Don't check email too often since Gmail will complain
@@ -71,46 +71,18 @@ FEEDFILE="/home/pi/Desktop/petfeeder/lastfeed"
 cupsToFeed = 1
 motorTime = cupsToFeed * 27 # It takes 27 seconds of motor turning (~1.75 rotations) to get 1 cup of feed
 
-
-# Function that gets Chuck Norris jokes from the internet. It uses an HTTP GET and then a JSON parser
-def getChuckNorrisQuote():
-    # The database where the jokes are stored
-    ICNDB="http://api.icndb.com/jokes/random"
-    # Doing a HTTP request to get the response (resp) and content (content)
-    resp, content = httplib2.Http().request(ICNDB)
-    # The content is in the following JSON format and needs to be parsed
-    # {u'type': u'success', u'value' : {u'joke': 'Text of the joke', u'id': 238, u'categories': []}}
-    parsed_content = json.loads(content)
-    joke = "\n\n** Random Chuck Norris Quote **:\n" + html2text.html2text(parsed_content['value']['joke'])
-    return joke
-    
-
-# Function that gets a number trivia from the internet. It uses an HTTP GET and then a JSON parser
-def getNumberTrivia():
-    # The database where the trivia are stored
-    NUMDB="http://numbersapi.com/random/trivia?json"
-    # Doing a HTTP request to get the response (resp) and content (content)
-    resp, content = httplib2.Http().request(NUMDB)
-    # The content is in the following JSON format and needs to be parsed
-    # {u'text': u'Text of trivia', u'type' : u'trivia, u'number': <number>, u'found': True}
-    parsed_content = json.loads(content)
-    trivia = "\n\n** Fact about the number " + str(parsed_content['number']) + " **\n"
-    trivia = trivia + parsed_content['text']
-    return trivia
-    
-
 # Function to check email
 def checkmail():
     global lastEmailCheck
     global lastFeed
     global feedInterval
-    
+
     if (time.time() > (lastEmailCheck + MAILCHECKDELAY)):  # Make sure that that atleast MAILCHECKDELAY time has passed
         lastEmailCheck = time.time()
         server = imaplib(GMAILHOSTNAME, use_uid=True, ssl=True)  # Create the server class from IMAPClient with HOSTNAME mail server
         server.login(GMAILUSER, GMAILPASSWD)
         server.select_folder(MAILBOX)
-        
+
         # See if there are any messages with subject "When" that are unread
         whenMessages = server.search([u'UNSEEN', u'SUBJECT', u'When'])
 
@@ -125,20 +97,13 @@ def checkmail():
                     msgBody = msgBody + "\nReady to feed now!"
                 else:
                     msgBody = msgBody + "\nThe next feeding can begin on " + time.strftime("%b %d at %I:%M %P", time.localtime(lastFeed + feedInterval))
-
-                if NUMBERTRIVIA:
-                    msgBody = msgBody + getNumberTrivia()
-
-                if CHUCKNORRIS:
-                    msgBody = msgBody + getChuckNorrisQuote()
-                                                
+        
                 sendemail(fromAddress, "Thanks for your feeding query", msgBody)
                 server.add_flags(whenMessages, [SEEN])
 
-
         # See if there are any messages with subject "Feed" that are unread
         feedMessages = server.search([u'UNSEEN', u'SUBJECT', u'Feed'])
-        
+
         # Respond to the feed messages and then exit
         if feedMessages:
             for msg in feedMessages:
@@ -151,12 +116,6 @@ def checkmail():
                 else:
                     msgBody = msgBody + "\nThe next feeding can begin at " + time.strftime("%b %d at %I:%M %P", time.localtime(lastFeed + feedInterval))
 
-                if NUMBERTRIVIA:
-                    msgBody = msgBody + getNumberTrivia()
-
-                if CHUCKNORRIS:
-                    msgBody = msgBody + getChuckNorrisQuote()
-                                                
                 sendemail(fromAddress, "Thanks for your feeding request", msgBody)
 
                 server.add_flags(feedMessages, [SEEN])
@@ -190,7 +149,7 @@ def sendemail(to, subject, text, attach=None):
 def buttonpressed(PIN):
     # Check if the button is pressed
     global GPIO
-    
+
     # Cheap (sleep) way of controlling bounces / rapid presses
     time.sleep(0.2)
     button_state = GPIO.input(PIN)
@@ -210,7 +169,7 @@ def printlcd(row, col, LCDmesg):
     # Set the row and column for the LCD and print the message
     global logFile
     global lcd
-    
+
     lcd.setCursor(row, col)
     lcd.message(LCDmesg)
 
@@ -247,7 +206,7 @@ try:
 
     #### Begin initializations #########################
     ####################################################
-    
+
     # Initialize the logfile
     logFile = open(LOGFILE, 'a')
 
@@ -255,8 +214,8 @@ try:
    # lcd = Adafruit_CharLCD()
     #lcd.begin(16,2)
     #lcd.clear()
-    
-    
+
+
 
     # Initialize the GPIO system
     GPIO.setwarnings(False)
@@ -269,7 +228,7 @@ try:
     # Initialize the pin for the feed and reset buttons
     GPIO.setup(FEEDBUTTONPIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.setup(RESETBUTTONPIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    
+
     # Initialize lastFeed
     if os.path.isfile(FEEDFILE):
         with open(FEEDFILE, 'r') as feedFile:
@@ -278,13 +237,13 @@ try:
     else:
         lastFeed = time.time()
         saveLastFeed()
-        
+
 
     #### End of initializations ########################
     ####################################################
 
     #### The main loop ####
-    
+
     while True:
 
         #### If reset button pressed, then reset the counter
@@ -294,7 +253,7 @@ try:
             time.sleep(2)
             lastFeed = time.time() - feedInterval + 5
             saveLastFeed()
-        
+
         #### Check if we are ready to feed
         if (time.time() - lastFeed) > feedInterval:
             printlcd(0,0, time.strftime("%m/%d %I:%M:%S%P", time.localtime(time.time())))
@@ -304,12 +263,12 @@ try:
             if buttonpressed(FEEDBUTTONPIN):
                 lastFeed = feednow()
                 saveLastFeed()
-            
+
             #### Check if remote feed request is available
             elif remotefeedrequest():
                 lastFeed = feednow()
                 saveLastFeed()
-                
+
         #### Since it is not time to feed yet, keep the countdown going
         else:
             timeToFeed = (lastFeed + feedInterval) - time.time()
@@ -333,8 +292,3 @@ except SystemExit:
     logFile.close()
     lcd.clear()
     GPIO.cleanup()
-
-
-
-
-
