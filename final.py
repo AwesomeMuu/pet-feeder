@@ -222,8 +222,8 @@ try:
     GPIO.setmode(GPIO.BCM)
 
     # Initialize the pin for the motor control
-    GPIO.setup(MOTORCONTROLPIN, GPIO.OUT)
-    GPIO.output(MOTORCONTROLPIN, False)
+    GPIO.setup(19, GPIO.OUT)
+    GPIO.output(19, True)
 
     # Initialize the pin for the feed and reset buttons
     GPIO.setup(FEEDBUTTONPIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
