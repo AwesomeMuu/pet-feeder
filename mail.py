@@ -16,7 +16,7 @@ def read_email_from_gmail():
         mail.login("pets.feedersp17@gmail.com","Spring17")
         mail.select('inbox')
 
-        type, data = mail.search(None, 'ALL')
+        type, data = mail.search(None, '(SUBJECT "When" UNSEEN)')
         mail_ids = data[0]
 
         id_list = mail_ids.split()   
@@ -29,6 +29,7 @@ def read_email_from_gmail():
 
             for response_part in data:
                 if isinstance(response_part, tuple):
+		    time.sleep(3)
                     msg = email.message_from_string(response_part[1])
                     email_subject = msg['subject']
                     email_from = msg['from']

@@ -57,7 +57,7 @@ GMAILUSER = 'pets.feedersp17@gmail.com' # Insert your email username
 GMAILPASSWD = 'Spring17' # Insert your email password
 NEWMAIL_OFFSET = 0
 lastEmailCheck = time.time()
-MAILCHECKDELAY = 10  # Don't check email too often since Gmail will complain
+MAILCHECKDELAY = 1  # Don't check email too often since Gmail will complain
 
 # GPIO pins for feeder control
 MOTORCONTROLPIN = 19
@@ -101,7 +101,7 @@ def checkmail():
 
                 sendemail(fromAddress, "Thanks for your feeding query", msgBody)
                 # server.add_flags(whenMessages, [SEEN])
-                server.store(msg, '+FLAGS', '\\Seen')
+                server.store(msg, '+FLAGS', '\Seen')
 
         # See if there are any messages with subject "Feed" that are unread
         feedMessages = server.search([u'UNSEEN', u'SUBJECT', u'Feed'])
