@@ -66,7 +66,7 @@ RESETBUTTONPIN = 13
 
 # Variables for feeding information
 readyToFeed = False # not used now but for future use
-feedInterval = 20 # This translates to 8 hours in seconds
+feedInterval = 60 # This translates to 8 hours in seconds
 FEEDFILE="/home/pi/pet-feeder/lastfeed.txt"
 cupsToFeed = 1
 motorTime = cupsToFeed * 4  # It takes 27 seconds of motor turning (~1.75 rotations) to get 1 cup of feed
@@ -93,24 +93,35 @@ def checkmail():
 
             # whenMessages = server.search([u'UNSEEN', u'SUBJECT', u'When'])
 
-            type, whenMessages = server.search(None, '(SUBJECT "When" UNSEEN)')
+            typ, whenMessages = server.search(None, '(SUBJECT "When" UNSEEN)')
+            if typ != 'OK':
+                print "Now messages found!"
+                return
+            for value in data[0].split():
+                rv, data = server.fetch(num, '(RFC822)')
+                if rv != 'OK':
+                    print "Error getting message", value
+                    return
 
-            mail_ids = whenMessages[0]
-            id_list = mail_ids.split()
-            first_email_id = int(id_list[0])
-            latest_email_id = int(id_list[-1])
+                msg = email.message_from_string(data[0][1])
+                print 'Message %s: %s' % (num, msg['Subject'])
+                print 'Raw Date:', msg['Date']
+
+            # mail_ids = whenMessages[0]
+            # id_list = mail_ids.split()
+            # first_email_id = int(id_list[0])
+            # latest_email_id = int(id_list[-1])
             email_subject = ""
 
-            for i in range(latest_email_id,first_email_id, -1):
-                typ, data = server.fetch(i, '(RFC822)' )
-
-                for response_part in data:
-                    if isinstance(response_part, tuple):
-                        time.sleep(3)
-                        msg = email.message_from_string(response_part[1])
-                        email_subject = msg['subject']
-                        print 'Subject : ' + email_subject + '\n'
-
+            # for i in range(latest_email_id,first_email_id, -1):
+            #     typ, data = server.fetch(i, '(RFC822)' )
+            #
+            #     for response_part in data:
+            #         if isinstance(response_part, tuple):
+            #             msg = email.message_from_string(response_part[1])
+            #             email_subject = msg['subject']
+            #             print 'Subject : ' + email_subject + '\n'
+            #
 
             # Respond to the when messages
             if email_subject == "When":
@@ -154,7 +165,6 @@ def checkmail():
 
                 for response_part in data:
                     if isinstance(response_part, tuple):
-                        time.sleep(3)
                         msg = email.message_from_string(response_part[1])
                         email_subject = msg['subject']
                         print 'Subject : ' + email_subject + '\n'
@@ -371,7 +381,7 @@ try:
             something = something + 1
             lastFeed = feednow()
             saveLastFeed()
-            
+
         #### Since it is not time to feed yet, keep the countdown going
         else:
             print("UDATE IN main else:")
