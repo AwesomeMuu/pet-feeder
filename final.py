@@ -93,7 +93,7 @@ def checkmail():
         id_list = mail_ids.split()
         first_email_id = int(id_list[0])
         latest_email_id = int(id_list[-1])
-	    email_subject = ""
+        email_subject = ""
 
         for i in range(latest_email_id,first_email_id, -1):
             typ, data = mail.fetch(i, '(RFC822)' )
