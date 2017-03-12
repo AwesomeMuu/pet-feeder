@@ -91,9 +91,6 @@ def checkmail():
             email_subject = ""
 
             # See if there are any messages with subject "When" that are unread
-
-            # whenMessages = server.search([u'UNSEEN', u'SUBJECT', u'When'])
-
             typ, whenMessages = server.search(None, '(SUBJECT "When" UNSEEN)')
             if typ != 'OK':
                 print "Now messages found!"
@@ -103,26 +100,10 @@ def checkmail():
                 if rv != 'OK':
                     print "Error getting message", value
                     return
-
                 msg = email.message_from_string(whenMessages[0][1])
                 email_subject = msg['Subject']
                 print 'Message %s: %s' % (value, msg['Subject'])
                 print 'Raw Date:', msg['Date']
-
-            # mail_ids = whenMessages[0]
-            # id_list = mail_ids.split()
-            # first_email_id = int(id_list[0])
-            # latest_email_id = int(id_list[-1])
-
-            # for i in range(latest_email_id,first_email_id, -1):
-            #     typ, data = server.fetch(i, '(RFC822)' )
-            #
-            #     for response_part in data:
-            #         if isinstance(response_part, tuple):
-            #             msg = email.message_from_string(response_part[1])
-            #             email_subject = msg['subject']
-            #             print 'Subject : ' + email_subject + '\n'
-            #
 
             # Respond to the when messages
             if email_subject == "When":
@@ -130,29 +111,20 @@ def checkmail():
                 print(something)
                 something = something + 1
                 for msg in whenMessages:
-                    # msginfo = server.fetch([msg], ['BODY[HEADER.FIELDS (FROM)]'])
-                    # fromAddress = str(msginfo[msg].get('BODY[HEADER.FIELDS (FROM)]')).split('<')[1].split('>')[0]
-                    # typ, data = server.fetch(msg, '(RFC822)' )
-
                     fromAddress = GMAILUSER
-
                     msgBody = "The last feeding was done on " + time.strftime("%b %d at %I:%M %P", time.localtime(lastFeed))
-
                     if (time.time() - lastFeed) > feedInterval:
                         msgBody = msgBody + "\nReady to feed now!"
                     else:
                         msgBody = msgBody + "\nThe next feeding can begin on " + time.strftime("%b %d at %I:%M %P", time.localtime(lastFeed + feedInterval))
-
                     sendemail(fromAddress, "Thanks for your feeding query", msgBody)
                     server.add_flags(whenMessages, [SEEN])
-                    # server.store(msg, '+FLAGS', '\Seen')
 
 
 
 
 
             # See if there are any messages with subject "Feed" that are unread
-            # feedMessages = server.search([u'UNSEEN', u'SUBJECT', u'Feed'])
             typ, feedMessages = server.search(None, '(SUBJECT "Feed" UNSEEN)')
             if typ != 'OK':
                 print "Now messages found!"
@@ -168,30 +140,12 @@ def checkmail():
                 print 'Message %s: %s' % (value, msg['Subject'])
                 print 'Raw Date:', msg['Date']
 
-            # mail_ids = feedMessages[0]
-            # id_list = mail_ids.split()
-            # first_email_id = int(id_list[0])
-            # latest_email_id = int(id_list[-1])
-            # email_subject = ""
-            #
-            # for i in range(latest_email_id,first_email_id, -1):
-            #     typ, data = server.fetch(i, '(RFC822)' )
-            #
-            #     for response_part in data:
-            #         if isinstance(response_part, tuple):
-            #             msg = email.message_from_string(response_part[1])
-            #             email_subject = msg['subject']
-            #             print 'Subject : ' + email_subject + '\n'
-
             if email_subject == "Feed":
                 print("UDATE IN FEED:")
                 print(something)
                 something = something + 1
 
                 for msg in feedMessages:
-                    # msginfo = server.fetch([msg], ['BODY[HEADER.FIELDS (FROM)]'])
-                    # fromAddress = str(msginfo[msg].get('BODY[HEADER.FIELDS (FROM)]')).split('<')[1].split('>')[0]
-
                     fromAddress = GMAILUSER
                     msgBody = "The last feeding was done at " + time.strftime("%b %d at %I:%M %P", time.localtime(lastFeed))
                     if (time.time() - lastFeed) > feedInterval:
@@ -201,13 +155,13 @@ def checkmail():
                     sendemail(fromAddress, "Thanks for your feeding request", msgBody)
                     server.add_flags(feedMessages, [SEEN])
 
-                return True
+
 
             # Respond to the feed messages and then exit
-            # if email_subject == "Feed":
-                # return True
+            if email_subject == "Feed":
+                return True
 
-            return False
+        return False
     except Exception as e:
         print str(e)
 
