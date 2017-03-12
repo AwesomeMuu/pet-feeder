@@ -70,7 +70,7 @@ feedInterval = 10 # This translates to 8 hours in seconds
 FEEDFILE="/home/pi/pet-feeder/lastfeed.txt"
 cupsToFeed = 1
 motorTime = cupsToFeed * 4 # It takes 27 seconds of motor turning (~1.75 rotations) to get 1 cup of feed
-UPDATE = 0
+something = 0
 
 # Function to check email
 def checkmail():
@@ -79,8 +79,8 @@ def checkmail():
     global feedInterval
     if (time.time() > (lastEmailCheck + MAILCHECKDELAY)):  # Make sure that that atleast MAILCHECKDELAY time has passed
         print("UDATE IN CHECKMAIL:")
-        print(UPDATE)
-        UPDATE = UPDATE + 1
+        print(something)
+        something = something + 1
 
         lastEmailCheck = time.time()
         server = imaplib.IMAP4_SSL(GMAILHOSTNAME)  # Create the server class from IMAPClient with HOSTNAME mail server
@@ -113,8 +113,8 @@ def checkmail():
         # Respond to the when messages
         if email_subject == "When":
             print("UDATE IN WHEN:")
-            print(UPDATE)
-            UPDATE = UPDATE + 1
+            print(something)
+            something = something + 1
             for msg in whenMessages:
                 # msginfo = server.fetch([msg], ['BODY[HEADER.FIELDS (FROM)]'])
                 # fromAddress = str(msginfo[msg].get('BODY[HEADER.FIELDS (FROM)]')).split('<')[1].split('>')[0]
@@ -161,8 +161,8 @@ def checkmail():
         # Respond to the feed messages and then exit
         if email_subject == "Feed":
             print("UDATE IN FEED:")
-            print(UPDATE)
-            UPDATE = UPDATE + 1
+            print(something)
+            something = something + 1
 
             for msg in feedMessages:
                 # msginfo = server.fetch([msg], ['BODY[HEADER.FIELDS (FROM)]'])
@@ -306,14 +306,14 @@ try:
 
     while True:
         print("UDATE IN MAIN:")
-        print(UPDATE)
-        UPDATE = UPDATE + 1
+        print(something)
+        something = something + 1
 
         #### If reset button pressed, then reset the counter
         if buttonpressed(RESETBUTTONPIN):
             print("UDATE IN buttonpressed:")
-            print(UPDATE)
-            UPDATE = UPDATE + 1
+            print(something)
+            something = something + 1
 
             # lcd.clear()
             # printlcd(0,0, "Resetting...   ")
@@ -323,8 +323,8 @@ try:
 
             if remotefeedrequest():
                 print("UDATE IN remotefeedrequest:")
-                print(UPDATE)
-                UPDATE = UPDATE + 1
+                print(something)
+                something = something + 1
 
                 lastFeed = feednow()
                 saveLastFeed()
@@ -332,8 +332,8 @@ try:
         #### Check if we are ready to feed
         if (time.time() - lastFeed) > feedInterval:
             print("UDATE IN AFTER 8 HOURS:")
-            print(UPDATE)
-            UPDATE = UPDATE + 1
+            print(something)
+            something = something + 1
 
             # printlcd(0,0, time.strftime("%m/%d %I:%M:%S%P", time.localtime(time.time())))
             # printlcd(0,1, "Ready to feed   ")
@@ -341,8 +341,8 @@ try:
             #### See if the button is pressed
             if buttonpressed(FEEDBUTTONPIN):
                 print("UDATE IN buttonpressed in 8 hours:")
-                print(UPDATE)
-                UPDATE = UPDATE + 1
+                print(something)
+                something = something + 1
 
                 lastFeed = feednow()
                 saveLastFeed()
@@ -350,8 +350,8 @@ try:
             #### Check if remote feed request is available
             elif remotefeedrequest():
                 print("UDATE IN remotefeedrequest in 8 hours:")
-                print(UPDATE)
-                UPDATE = UPDATE + 1
+                print(something)
+                something = something + 1
 
                 lastFeed = feednow()
                 saveLastFeed()
@@ -359,8 +359,8 @@ try:
         #### Since it is not time to feed yet, keep the countdown going
         else:
             print("UDATE IN main else:")
-            print(UPDATE)
-            UPDATE = UPDATE + 1
+            print(something)
+            something = something + 1
 
 
             timeToFeed = (lastFeed + feedInterval) - time.time()
