@@ -77,6 +77,7 @@ def checkmail():
     global lastEmailCheck
     global lastFeed
     global feedInterval
+    global something
     if (time.time() > (lastEmailCheck + MAILCHECKDELAY)):  # Make sure that that atleast MAILCHECKDELAY time has passed
         print("UDATE IN CHECKMAIL:")
         print(something)
