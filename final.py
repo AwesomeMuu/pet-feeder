@@ -204,7 +204,7 @@ def checkmail():
                     sendemail(fromAddress, "Thanks for your feeding request", msgBody)
 
                     server.add_flags(feedMessages, [SEEN])
-                return True
+            return True
 
         return False
     except Exception as e:
