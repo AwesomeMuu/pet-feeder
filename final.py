@@ -96,7 +96,7 @@ def checkmail():
         email_subject = ""
 
         for i in range(latest_email_id,first_email_id, -1):
-            typ, data = mail.fetch(i, '(RFC822)' )
+            typ, data = server.fetch(i, '(RFC822)' )
 
             for response_part in data:
                 if isinstance(response_part, tuple):
@@ -137,7 +137,7 @@ def checkmail():
         email_subject = ""
 
         for i in range(latest_email_id,first_email_id, -1):
-            typ, data = mail.fetch(i, '(RFC822)' )
+            typ, data = server.fetch(i, '(RFC822)' )
 
             for response_part in data:
                 if isinstance(response_part, tuple):
