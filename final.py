@@ -45,8 +45,7 @@ from Adafruit_CharLCD import Adafruit_CharLCD as LCD
 
 DEBUG = False
 MOTORON = True
-CHUCKNORRIS = False
-NUMBERTRIVIA = True
+
 
 # Here is our logfile
 LOGFILE = "/tmp/petfeeder.log"
@@ -233,7 +232,7 @@ def feednow():
     print ("we are in feednow()")
     # lcd.clear()
     # printlcd(0,0,"Feeding now.....")
-    if MOTORON:
+    if True:
         GPIO.output(MOTORCONTROLPIN, True)
         time.sleep(motorTime)
         GPIO.output(MOTORCONTROLPIN, False)
