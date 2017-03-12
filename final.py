@@ -66,10 +66,11 @@ RESETBUTTONPIN = 13
 
 # Variables for feeding information
 readyToFeed = False # not used now but for future use
-feedInterval = 28800 # This translates to 8 hours in seconds
+feedInterval = 10 # This translates to 8 hours in seconds
 FEEDFILE="/home/pi/pet-feeder/lastfeed.txt"
 cupsToFeed = 1
 motorTime = cupsToFeed * 4 # It takes 27 seconds of motor turning (~1.75 rotations) to get 1 cup of feed
+UPDATE = 0
 
 # Function to check email
 def checkmail():
@@ -77,6 +78,10 @@ def checkmail():
     global lastFeed
     global feedInterval
     if (time.time() > (lastEmailCheck + MAILCHECKDELAY)):  # Make sure that that atleast MAILCHECKDELAY time has passed
+        print("UDATE IN CHECKMAIL:")
+        print(UPDATE)
+
+        UPDATE = UPDATE + 1
         lastEmailCheck = time.time()
         server = imaplib.IMAP4_SSL(GMAILHOSTNAME)  # Create the server class from IMAPClient with HOSTNAME mail server
         server.login(GMAILUSER, GMAILPASSWD)
@@ -107,6 +112,8 @@ def checkmail():
 
         # Respond to the when messages
         if email_subject == "When":
+            print("UDATE IN WHEN:")
+            print(UPDATE)
             for msg in whenMessages:
                 # msginfo = server.fetch([msg], ['BODY[HEADER.FIELDS (FROM)]'])
                 # fromAddress = str(msginfo[msg].get('BODY[HEADER.FIELDS (FROM)]')).split('<')[1].split('>')[0]
@@ -152,6 +159,8 @@ def checkmail():
 
         # Respond to the feed messages and then exit
         if email_subject == "Feed":
+            print("UDATE IN FEED:")
+            print(UPDATE)
             for msg in feedMessages:
                 # msginfo = server.fetch([msg], ['BODY[HEADER.FIELDS (FROM)]'])
                 # fromAddress = str(msginfo[msg].get('BODY[HEADER.FIELDS (FROM)]')).split('<')[1].split('>')[0]
@@ -293,27 +302,42 @@ try:
     #### The main loop ####
 
     while True:
-
+        print("UDATE IN MAIN:")
+        print(UPDATE)
         #### If reset button pressed, then reset the counter
         if buttonpressed(RESETBUTTONPIN):
+            print("UDATE IN buttonpressed:")
+            print(UPDATE)
             # lcd.clear()
             # printlcd(0,0, "Resetting...   ")
             time.sleep(2)
             lastFeed = time.time() - feedInterval + 5
             saveLastFeed()
 
+            if remotefeedrequest():
+                print("UDATE IN remotefeedrequest:")
+                print(UPDATE)
+                lastFeed = feednow()
+                saveLastFeed()
+
         #### Check if we are ready to feed
         if (time.time() - lastFeed) > feedInterval:
+            print("UDATE IN AFTER 8 HOURS:")
+            print(UPDATE)
             # printlcd(0,0, time.strftime("%m/%d %I:%M:%S%P", time.localtime(time.time())))
             # printlcd(0,1, "Ready to feed   ")
 
             #### See if the button is pressed
             if buttonpressed(FEEDBUTTONPIN):
+                print("UDATE IN buttonpressed in 8 hours:")
+                print(UPDATE)
                 lastFeed = feednow()
                 saveLastFeed()
 
             #### Check if remote feed request is available
             elif remotefeedrequest():
+                print("UDATE IN remotefeedrequest in 8 hours:")
+                print(UPDATE)
                 lastFeed = feednow()
                 saveLastFeed()
 
