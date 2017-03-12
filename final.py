@@ -20,6 +20,7 @@ from email.MIMEMultipart import MIMEMultipart
 from email.MIMEBase import MIMEBase
 from email.MIMEText import MIMEText
 from email import Encoders
+import email
 import os
 import sys
 import RPi.GPIO as GPIO
