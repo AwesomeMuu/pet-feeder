@@ -77,102 +77,99 @@ def checkmail():
     global lastEmailCheck
     global lastFeed
     global feedInterval
-    try:
-        if (time.time() > (lastEmailCheck + MAILCHECKDELAY)):  # Make sure that that atleast MAILCHECKDELAY time has passed
-            lastEmailCheck = time.time()
-            server = imaplib.IMAP4_SSL(GMAILHOSTNAME)  # Create the server class from IMAPClient with HOSTNAME mail server
-            server.login(GMAILUSER, GMAILPASSWD)
-            server.select(MAILBOX)
+    if (time.time() > (lastEmailCheck + MAILCHECKDELAY)):  # Make sure that that atleast MAILCHECKDELAY time has passed
+        lastEmailCheck = time.time()
+        server = imaplib.IMAP4_SSL(GMAILHOSTNAME)  # Create the server class from IMAPClient with HOSTNAME mail server
+        server.login(GMAILUSER, GMAILPASSWD)
+        server.select(MAILBOX)
 
-            # See if there are any messages with subject "When" that are unread
+        # See if there are any messages with subject "When" that are unread
 
-            # whenMessages = server.search([u'UNSEEN', u'SUBJECT', u'When'])
+        # whenMessages = server.search([u'UNSEEN', u'SUBJECT', u'When'])
 
-            type, whenMessages = server.search(None, '(SUBJECT "When" UNSEEN)')
+        type, whenMessages = server.search(None, '(SUBJECT "When" UNSEEN)')
 
-            mail_ids = whenMessages[0]
-            id_list = mail_ids.split()
-            first_email_id = int(id_list[0])
-            latest_email_id = int(id_list[-1])
-            email_subject = ""
+        mail_ids = whenMessages[0]
+        id_list = mail_ids.split()
+        first_email_id = int(id_list[0])
+        latest_email_id = int(id_list[-1])
+        email_subject = ""
 
-            for i in range(latest_email_id,first_email_id, -1):
-                typ, data = server.fetch(i, '(RFC822)' )
+        for i in range(latest_email_id,first_email_id, -1):
+            typ, data = server.fetch(i, '(RFC822)' )
 
-                for response_part in data:
-                    if isinstance(response_part, tuple):
-                        time.sleep(3)
-                        msg = email.message_from_string(response_part[1])
-                        email_subject = msg['subject']
-                        print 'Subject : ' + email_subject + '\n'
+            for response_part in data:
+                if isinstance(response_part, tuple):
+                    time.sleep(3)
+                    msg = email.message_from_string(response_part[1])
+                    email_subject = msg['subject']
+                    print 'Subject : ' + email_subject + '\n'
 
 
-            # Respond to the when messages
-            if email_subject == "When":
-                for msg in whenMessages:
-                    # msginfo = server.fetch([msg], ['BODY[HEADER.FIELDS (FROM)]'])
-                    # fromAddress = str(msginfo[msg].get('BODY[HEADER.FIELDS (FROM)]')).split('<')[1].split('>')[0]
-                    # typ, data = server.fetch(msg, '(RFC822)' )
+        # Respond to the when messages
+        if email_subject == "When":
+            for msg in whenMessages:
+                # msginfo = server.fetch([msg], ['BODY[HEADER.FIELDS (FROM)]'])
+                # fromAddress = str(msginfo[msg].get('BODY[HEADER.FIELDS (FROM)]')).split('<')[1].split('>')[0]
+                # typ, data = server.fetch(msg, '(RFC822)' )
 
-                    fromAddress = GMAILUSER
+                fromAddress = GMAILUSER
 
-                    msgBody = "The last feeding was done on " + time.strftime("%b %d at %I:%M %P", time.localtime(lastFeed))
+                msgBody = "The last feeding was done on " + time.strftime("%b %d at %I:%M %P", time.localtime(lastFeed))
 
-                    if (time.time() - lastFeed) > feedInterval:
-                        msgBody = msgBody + "\nReady to feed now!"
-                    else:
-                        msgBody = msgBody + "\nThe next feeding can begin on " + time.strftime("%b %d at %I:%M %P", time.localtime(lastFeed + feedInterval))
+                if (time.time() - lastFeed) > feedInterval:
+                    msgBody = msgBody + "\nReady to feed now!"
+                else:
+                    msgBody = msgBody + "\nThe next feeding can begin on " + time.strftime("%b %d at %I:%M %P", time.localtime(lastFeed + feedInterval))
 
-                    sendemail(fromAddress, "Thanks for your feeding query", msgBody)
-                    server.add_flags(whenMessages, [SEEN])
-                    # server.store(msg, '+FLAGS', '\Seen')
-
+                sendemail(fromAddress, "Thanks for your feeding query", msgBody)
+                server.add_flags(whenMessages, [SEEN])
+                # server.store(msg, '+FLAGS', '\Seen')
 
 
 
 
-            # See if there are any messages with subject "Feed" that are unread
-            # feedMessages = server.search([u'UNSEEN', u'SUBJECT', u'Feed'])
-            type, feedMessages = server.search(None, '(SUBJECT "Feed" UNSEEN)')
 
-            mail_ids = feedMessages[0]
-            id_list = mail_ids.split()
-            first_email_id = int(id_list[0])
-            latest_email_id = int(id_list[-1])
-            email_subject = ""
+        # See if there are any messages with subject "Feed" that are unread
+        # feedMessages = server.search([u'UNSEEN', u'SUBJECT', u'Feed'])
+        type, feedMessages = server.search(None, '(SUBJECT "Feed" UNSEEN)')
 
-            for i in range(latest_email_id,first_email_id, -1):
-                typ, data = server.fetch(i, '(RFC822)' )
+        mail_ids = feedMessages[0]
+        id_list = mail_ids.split()
+        first_email_id = int(id_list[0])
+        latest_email_id = int(id_list[-1])
+        email_subject = ""
 
-                for response_part in data:
-                    if isinstance(response_part, tuple):
-                        time.sleep(3)
-                        msg = email.message_from_string(response_part[1])
-                        email_subject = msg['subject']
-                        print 'Subject : ' + email_subject + '\n'
+        for i in range(latest_email_id,first_email_id, -1):
+            typ, data = server.fetch(i, '(RFC822)' )
+
+            for response_part in data:
+                if isinstance(response_part, tuple):
+                    time.sleep(3)
+                    msg = email.message_from_string(response_part[1])
+                    email_subject = msg['subject']
+                    print 'Subject : ' + email_subject + '\n'
 
 
-            # Respond to the feed messages and then exit
-            if email_subject == "Feed":
-                for msg in feedMessages:
-                    # msginfo = server.fetch([msg], ['BODY[HEADER.FIELDS (FROM)]'])
-                    # fromAddress = str(msginfo[msg].get('BODY[HEADER.FIELDS (FROM)]')).split('<')[1].split('>')[0]
+        # Respond to the feed messages and then exit
+        if email_subject == "Feed":
+            for msg in feedMessages:
+                # msginfo = server.fetch([msg], ['BODY[HEADER.FIELDS (FROM)]'])
+                # fromAddress = str(msginfo[msg].get('BODY[HEADER.FIELDS (FROM)]')).split('<')[1].split('>')[0]
 
-                    fromAddress = GMAILUSER
-                    msgBody = "The last feeding was done at " + time.strftime("%b %d at %I:%M %P", time.localtime(lastFeed))
-                    if (time.time() - lastFeed) > feedInterval:
-                        msgBody = msgBody + "\nReady to be fed, will be feeding Lucky shortly"
-                    else:
-                        msgBody = msgBody + "\nThe next feeding can begin at " + time.strftime("%b %d at %I:%M %P", time.localtime(lastFeed + feedInterval))
+                fromAddress = GMAILUSER
+                msgBody = "The last feeding was done at " + time.strftime("%b %d at %I:%M %P", time.localtime(lastFeed))
+                if (time.time() - lastFeed) > feedInterval:
+                    msgBody = msgBody + "\nReady to be fed, will be feeding Lucky shortly"
+                else:
+                    msgBody = msgBody + "\nThe next feeding can begin at " + time.strftime("%b %d at %I:%M %P", time.localtime(lastFeed + feedInterval))
 
-                    sendemail(fromAddress, "Thanks for your feeding request", msgBody)
+                sendemail(fromAddress, "Thanks for your feeding request", msgBody)
 
-                    server.add_flags(feedMessages, [SEEN])
-                return True
+                server.add_flags(feedMessages, [SEEN])
+            return True
 
-        return False
-    except Exception as e:
-        print str(e)
+    return False
 
 
 def sendemail(to, subject, text, attach=None):
@@ -335,6 +332,11 @@ try:
         time.sleep(.6)
 
 #### Cleaning up at the end
+except Exception as e:
+    print str(e)
+    logFile.close()
+    GPIO.cleanup()
+
 except KeyboardInterrupt:
     logFile.close()
     #lcd.clear()
