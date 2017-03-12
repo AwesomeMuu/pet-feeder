@@ -80,9 +80,9 @@ def checkmail():
     global something
     try:
         if (time.time() > (lastEmailCheck + MAILCHECKDELAY)):  # Make sure that that atleast MAILCHECKDELAY time has passed
-            print("UDATE IN CHECKMAIL:")
-            print(something)
-            something = something + 1
+            # print("UDATE IN CHECKMAIL:")
+            # print(something)
+            # something = something + 1
 
             lastEmailCheck = time.time()
             server = imaplib.IMAP4_SSL(GMAILHOSTNAME)  # Create the server class from IMAPClient with HOSTNAME mail server
@@ -107,9 +107,9 @@ def checkmail():
 
             # Respond to the when messages
             if email_subject == "When":
-                print("UDATE IN WHEN:")
-                print(something)
-                something = something + 1
+                # print("UDATE IN WHEN:")
+                # print(something)
+                # something = something + 1
                 for msg in whenMessages:
                     fromAddress = GMAILUSER
                     msgBody = "The last feeding was done on " + time.strftime("%b %d at %I:%M %P", time.localtime(lastFeed))
@@ -137,13 +137,13 @@ def checkmail():
 
                 msg = email.message_from_string(feedMessages[0][1])
                 email_subject = msg['Subject']
-                print 'Message %s: %s' % (value, msg['Subject'])
-                print 'Raw Date:', msg['Date']
+                # print 'Message %s: %s' % (value, msg['Subject'])
+                # print 'Raw Date:', msg['Date']
 
             if email_subject == "Feed":
-                print("UDATE IN FEED:")
-                print(something)
-                something = something + 1
+                # print("UDATE IN FEED:")
+                # print(something)
+                # something = something + 1
 
                 for msg in feedMessages:
                     fromAddress = GMAILUSER
@@ -288,15 +288,15 @@ try:
     #### The main loop ####
 
     while True:
-        print("UDATE IN MAIN:")
-        print(something)
-        something = something + 1
+        # print("UDATE IN MAIN:")
+        # print(something)
+        # something = something + 1
 
         #### If reset button pressed, then reset the counter
         if buttonpressed(RESETBUTTONPIN):
-            print("UDATE IN buttonpressed:")
-            print(something)
-            something = something + 1
+            # print("UDATE IN buttonpressed:")
+            # print(something)
+            # something = something + 1
 
             # lcd.clear()
             # printlcd(0,0, "Resetting...   ")
@@ -305,16 +305,16 @@ try:
             saveLastFeed()
 
         if remotefeedrequest():
-            print("UDATE IN remotefeedrequest:")
-            print(something)
-            something = something + 1
+            # print("UDATE IN remotefeedrequest:")
+            # print(something)
+            # something = something + 1
             lastFeed = feednow()
             saveLastFeed()
 
         if buttonpressed(FEEDBUTTONPIN):
-            print("UPDATE IN buttonpressed FEEDBUTTONPIN:")
-            print(something)
-            something = something+1
+            # print("UPDATE IN buttonpressed FEEDBUTTONPIN:")
+            # print(something)
+            # something = something+1
             lastFeed = feednow()
             saveLastFeed()
 
@@ -345,17 +345,17 @@ try:
             #
             #     lastFeed = feednow()
             #     saveLastFeed()
-            print("it is longer than 8 hours")
-            print(something)
-            something = something + 1
+            # print("it is longer than 8 hours")
+            # print(something)
+            # something = something + 1
             lastFeed = feednow()
             saveLastFeed()
 
         #### Since it is not time to feed yet, keep the countdown going
         else:
-            print("UDATE IN main else:")
-            print(something)
-            something = something + 1
+            # print("UDATE IN main else:")
+            # print(something)
+            # something = something + 1
 
             timeToFeed = (lastFeed + feedInterval) - time.time()
             #printlcd(0,0, time.strftime("%m/%d %I:%M:%S%P", time.localtime(time.time())))
