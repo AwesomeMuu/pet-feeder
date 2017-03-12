@@ -89,13 +89,12 @@ def checkmail():
 
         type, whenMessages = server.search(None, '(SUBJECT "When" UNSEEN)')
 
-	mail_ids = whenMessages[0]
-
-        id_list = mail_ids.split()   
+        mail_ids = whenMessages[0]
+        id_list = mail_ids.split()
         first_email_id = int(id_list[0])
         latest_email_id = int(id_list[-1])
+	    email_subject = ""
 
-	email_subject = ""
         for i in range(latest_email_id,first_email_id, -1):
             typ, data = mail.fetch(i, '(RFC822)' )
 
@@ -131,8 +130,25 @@ def checkmail():
         # feedMessages = server.search([u'UNSEEN', u'SUBJECT', u'Feed'])
         type, feedMessages = server.search(None, '(SUBJECT "Feed" UNSEEN)')
 
+            mail_ids = feedMessages[0]
+            id_list = mail_ids.split()
+            first_email_id = int(id_list[0])
+            latest_email_id = int(id_list[-1])
+    	    email_subject = ""
+
+            for i in range(latest_email_id,first_email_id, -1):
+                typ, data = mail.fetch(i, '(RFC822)' )
+
+                for response_part in data:
+                    if isinstance(response_part, tuple):
+                        time.sleep(3)
+                        msg = email.message_from_string(response_part[1])
+                        email_subject = msg['subject']
+                        print 'Subject : ' + email_subject + '\n'
+
+
         # Respond to the feed messages and then exit
-        if feedMessages:
+        if email_subject == "Feed":
             for msg in feedMessages:
                 msginfo = server.fetch([msg], ['BODY[HEADER.FIELDS (FROM)]'])
                 fromAddress = str(msginfo[msg].get('BODY[HEADER.FIELDS (FROM)]')).split('<')[1].split('>')[0]
