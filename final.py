@@ -88,7 +88,7 @@ def checkmail():
             server = imaplib.IMAP4_SSL(GMAILHOSTNAME)  # Create the server class from IMAPClient with HOSTNAME mail server
             server.login(GMAILUSER, GMAILPASSWD)
             server.select(MAILBOX)
-
+            email_subject = ""
             # See if there are any messages with subject "When" that are unread
 
             # whenMessages = server.search([u'UNSEEN', u'SUBJECT', u'When'])
@@ -98,20 +98,20 @@ def checkmail():
                 print "Now messages found!"
                 return
             for value in whenMessages[0].split():
-                rv, whenMessages = server.fetch(num, '(RFC822)')
+                rv, whenMessages = server.fetch(value, '(RFC822)')
                 if rv != 'OK':
                     print "Error getting message", value
                     return
 
                 msg = email.message_from_string(whenMessages[0][1])
-                print 'Message %s: %s' % (num, msg['Subject'])
+                email_subject = msg['Subject']
+                print 'Message %s: %s' % (value, msg['Subject'])
                 print 'Raw Date:', msg['Date']
 
             # mail_ids = whenMessages[0]
             # id_list = mail_ids.split()
             # first_email_id = int(id_list[0])
             # latest_email_id = int(id_list[-1])
-            email_subject = ""
 
             # for i in range(latest_email_id,first_email_id, -1):
             #     typ, data = server.fetch(i, '(RFC822)' )
