@@ -259,7 +259,7 @@ def feednow():
 def saveLastFeed():
     global FEEDFILE
     global lastFeed
-    
+
     feedFile = open(FEEDFILE, 'w')
     feedFile.write(str(lastFeed))
     feedFile.close()
@@ -325,40 +325,51 @@ try:
             lastFeed = time.time() - feedInterval + 5
             saveLastFeed()
 
-            if remotefeedrequest():
-                print("UDATE IN remotefeedrequest:")
-                print(something)
-                something = something + 1
+        if remotefeedrequest():
+            print("UDATE IN remotefeedrequest:")
+            print(something)
+            something = something + 1
+            lastFeed = feednow()
+            saveLastFeed()
 
-                lastFeed = feednow()
-                saveLastFeed()
+        if buttonpressed(FEEDBUTTONPIN):
+            print("UPDATE IN buttonpressed FEEDBUTTONPIN:")
+            print(something)
+            something = something+1
+            lastFeed = feednow()
+            saveLastFeed()
+
 
         #### Check if we are ready to feed
         if (time.time() - lastFeed) > feedInterval:
-            print("UDATE IN AFTER 8 HOURS:")
+            # print("UDATE IN AFTER 8 HOURS:")
+            # print(something)
+            # something = something + 1
+            #
+            # # printlcd(0,0, time.strftime("%m/%d %I:%M:%S%P", time.localtime(time.time())))
+            # # printlcd(0,1, "Ready to feed   ")
+            #
+            # #### See if the button is pressed
+            # if buttonpressed(FEEDBUTTONPIN):
+            #     print("UDATE IN buttonpressed in 8 hours:")
+            #     print(something)
+            #     something = something + 1
+            #
+            #     lastFeed = feednow()
+            #     saveLastFeed()
+            #
+            # #### Check if remote feed request is available
+            # elif remotefeedrequest():
+            #     print("UDATE IN remotefeedrequest in 8 hours:")
+            #     print(something)
+            #     something = something + 1
+            #
+            #     lastFeed = feednow()
+            #     saveLastFeed()
+            print("it is longer than 8 hours")
             print(something)
             something = something + 1
-
-            # printlcd(0,0, time.strftime("%m/%d %I:%M:%S%P", time.localtime(time.time())))
-            # printlcd(0,1, "Ready to feed   ")
-
-            #### See if the button is pressed
-            if buttonpressed(FEEDBUTTONPIN):
-                print("UDATE IN buttonpressed in 8 hours:")
-                print(something)
-                something = something + 1
-
-                lastFeed = feednow()
-                saveLastFeed()
-
-            #### Check if remote feed request is available
-            elif remotefeedrequest():
-                print("UDATE IN remotefeedrequest in 8 hours:")
-                print(something)
-                something = something + 1
-
-                lastFeed = feednow()
-                saveLastFeed()
+            feednow()
 
         #### Since it is not time to feed yet, keep the countdown going
         else:
@@ -366,11 +377,11 @@ try:
             print(something)
             something = something + 1
 
-
             timeToFeed = (lastFeed + feedInterval) - time.time()
             #printlcd(0,0, time.strftime("%m/%d %I:%M:%S%P", time.localtime(time.time())))
             #printlcd(0,1, 'Next:' + time.strftime("%Hh %Mm %Ss", time.gmtime(timeToFeed)))
             checkmail()
+
 	    if buttonpressed(FEEDBUTTONPIN):
             #    lcd.clear()
             #    printlcd(0,0, "Not now, try at ")
