@@ -1,4 +1,4 @@
-###########################################################################################
+############################################################################################
 # petfeeder.py v 1.0
 #
 # Author: Krish Sivakumar
@@ -97,7 +97,7 @@ def checkmail():
             if typ != 'OK':
                 print "Now messages found!"
                 return
-            for value in data[0].split():
+            for value in whenMessages[0].split():
                 rv, whenMessages = server.fetch(num, '(RFC822)')
                 if rv != 'OK':
                     print "Error getting message", value
