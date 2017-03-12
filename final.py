@@ -69,7 +69,7 @@ readyToFeed = False # not used now but for future use
 feedInterval = 10 # This translates to 8 hours in seconds
 FEEDFILE="/home/pi/pet-feeder/lastfeed.txt"
 cupsToFeed = 1
-motorTime = cupsToFeed * 4 # It takes 27 seconds of motor turning (~1.75 rotations) to get 1 cup of feed
+motorTime = cupsToFeed * 10  # It takes 27 seconds of motor turning (~1.75 rotations) to get 1 cup of feed
 something = 0
 
 # Function to check email
