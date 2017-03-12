@@ -369,8 +369,9 @@ try:
             print("it is longer than 8 hours")
             print(something)
             something = something + 1
-            feednow()
-
+            lastFeed = feednow()
+            saveLastFeed()
+            
         #### Since it is not time to feed yet, keep the countdown going
         else:
             print("UDATE IN main else:")
