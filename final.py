@@ -80,8 +80,8 @@ def checkmail():
     if (time.time() > (lastEmailCheck + MAILCHECKDELAY)):  # Make sure that that atleast MAILCHECKDELAY time has passed
         print("UDATE IN CHECKMAIL:")
         print(UPDATE)
-
         UPDATE = UPDATE + 1
+
         lastEmailCheck = time.time()
         server = imaplib.IMAP4_SSL(GMAILHOSTNAME)  # Create the server class from IMAPClient with HOSTNAME mail server
         server.login(GMAILUSER, GMAILPASSWD)
@@ -307,6 +307,8 @@ try:
     while True:
         print("UDATE IN MAIN:")
         print(UPDATE)
+        UPDATE = UPDATE + 1
+
         #### If reset button pressed, then reset the counter
         if buttonpressed(RESETBUTTONPIN):
             print("UDATE IN buttonpressed:")
@@ -350,12 +352,17 @@ try:
                 print("UDATE IN remotefeedrequest in 8 hours:")
                 print(UPDATE)
                 UPDATE = UPDATE + 1
-                
+
                 lastFeed = feednow()
                 saveLastFeed()
 
         #### Since it is not time to feed yet, keep the countdown going
         else:
+            print("UDATE IN main else:")
+            print(UPDATE)
+            UPDATE = UPDATE + 1
+
+
             timeToFeed = (lastFeed + feedInterval) - time.time()
             #printlcd(0,0, time.strftime("%m/%d %I:%M:%S%P", time.localtime(time.time())))
             #printlcd(0,1, 'Next:' + time.strftime("%Hh %Mm %Ss", time.gmtime(timeToFeed)))
