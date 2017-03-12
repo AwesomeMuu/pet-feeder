@@ -153,17 +153,17 @@ def checkmail():
 
             # See if there are any messages with subject "Feed" that are unread
             # feedMessages = server.search([u'UNSEEN', u'SUBJECT', u'Feed'])
-            type, feedMessages = server.search(None, '(SUBJECT "Feed" UNSEEN)')
+            typ, feedMessages = server.search(None, '(SUBJECT "Feed" UNSEEN)')
             if typ != 'OK':
                 print "Now messages found!"
                 return
-            for value in whenMessages[0].split():
-                rv, whenMessages = server.fetch(value, '(RFC822)')
+            for value in feedMessages[0].split():
+                rv, feedMessages = server.fetch(value, '(RFC822)')
                 if rv != 'OK':
                     print "Error getting message", value
                     return
 
-                msg = email.message_from_string(whenMessages[0][1])
+                msg = email.message_from_string(feedMessages[0][1])
                 email_subject = msg['Subject']
                 print 'Message %s: %s' % (value, msg['Subject'])
                 print 'Raw Date:', msg['Date']
