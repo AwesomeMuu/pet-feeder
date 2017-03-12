@@ -66,10 +66,10 @@ RESETBUTTONPIN = 13
 
 # Variables for feeding information
 readyToFeed = False # not used now but for future use
-feedInterval = 10 # This translates to 8 hours in seconds
+feedInterval = 20 # This translates to 8 hours in seconds
 FEEDFILE="/home/pi/pet-feeder/lastfeed.txt"
 cupsToFeed = 1
-motorTime = cupsToFeed * 10  # It takes 27 seconds of motor turning (~1.75 rotations) to get 1 cup of feed
+motorTime = cupsToFeed * 4  # It takes 27 seconds of motor turning (~1.75 rotations) to get 1 cup of feed
 something = 0
 
 # Function to check email
@@ -261,7 +261,7 @@ def saveLastFeed():
     global lastFeed
     
     feedFile = open(FEEDFILE, 'w')
-    feedFile.write(float(lastFeed))
+    feedFile.write(str(lastFeed))
     feedFile.close()
 
 
@@ -371,7 +371,7 @@ try:
             #printlcd(0,0, time.strftime("%m/%d %I:%M:%S%P", time.localtime(time.time())))
             #printlcd(0,1, 'Next:' + time.strftime("%Hh %Mm %Ss", time.gmtime(timeToFeed)))
             checkmail()
-            if buttonpressed(FEEDBUTTONPIN):
+	    if buttonpressed(FEEDBUTTONPIN):
             #    lcd.clear()
             #    printlcd(0,0, "Not now, try at ")
             #    printlcd(0,1, time.strftime("%b/%d %H:%M", time.localtime(lastFeed + feedInterval)))
