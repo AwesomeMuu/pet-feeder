@@ -98,12 +98,12 @@ def checkmail():
                 print "Now messages found!"
                 return
             for value in data[0].split():
-                rv, data = server.fetch(num, '(RFC822)')
+                rv, whenMessages = server.fetch(num, '(RFC822)')
                 if rv != 'OK':
                     print "Error getting message", value
                     return
 
-                msg = email.message_from_string(data[0][1])
+                msg = email.message_from_string(whenMessages[0][1])
                 print 'Message %s: %s' % (num, msg['Subject'])
                 print 'Raw Date:', msg['Date']
 
