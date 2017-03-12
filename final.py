@@ -152,9 +152,9 @@ def checkmail():
                         msgBody = msgBody + "\nReady to be fed, will be feeding Lucky shortly"
                     else:
                         msgBody = msgBody + "\nThe next feeding can begin at " + time.strftime("%b %d at %I:%M %P", time.localtime(lastFeed + feedInterval))
+                    feednow()
                     sendemail(fromAddress, "Thanks for your feeding request", msgBody)
                     server.add_flags(feedMessages, [SEEN])
-
 
 
             # Respond to the feed messages and then exit
