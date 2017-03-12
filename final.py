@@ -259,8 +259,9 @@ def feednow():
 def saveLastFeed():
     global FEEDFILE
     global lastFeed
-    with open(FEEDFILE, 'w') as feedFile:
-        feedFile.write(float(lastFeed))
+    
+    feedFile = open(FEEDFILE, 'w')
+    feedFile.write(float(lastFeed))
     feedFile.close()
 
 
