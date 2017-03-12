@@ -114,6 +114,7 @@ def checkmail():
         if email_subject == "When":
             print("UDATE IN WHEN:")
             print(UPDATE)
+            UPDATE = UPDATE + 1
             for msg in whenMessages:
                 # msginfo = server.fetch([msg], ['BODY[HEADER.FIELDS (FROM)]'])
                 # fromAddress = str(msginfo[msg].get('BODY[HEADER.FIELDS (FROM)]')).split('<')[1].split('>')[0]
@@ -161,6 +162,8 @@ def checkmail():
         if email_subject == "Feed":
             print("UDATE IN FEED:")
             print(UPDATE)
+            UPDATE = UPDATE + 1
+
             for msg in feedMessages:
                 # msginfo = server.fetch([msg], ['BODY[HEADER.FIELDS (FROM)]'])
                 # fromAddress = str(msginfo[msg].get('BODY[HEADER.FIELDS (FROM)]')).split('<')[1].split('>')[0]
@@ -308,6 +311,8 @@ try:
         if buttonpressed(RESETBUTTONPIN):
             print("UDATE IN buttonpressed:")
             print(UPDATE)
+            UPDATE = UPDATE + 1
+
             # lcd.clear()
             # printlcd(0,0, "Resetting...   ")
             time.sleep(2)
@@ -317,6 +322,8 @@ try:
             if remotefeedrequest():
                 print("UDATE IN remotefeedrequest:")
                 print(UPDATE)
+                UPDATE = UPDATE + 1
+
                 lastFeed = feednow()
                 saveLastFeed()
 
@@ -324,6 +331,8 @@ try:
         if (time.time() - lastFeed) > feedInterval:
             print("UDATE IN AFTER 8 HOURS:")
             print(UPDATE)
+            UPDATE = UPDATE + 1
+
             # printlcd(0,0, time.strftime("%m/%d %I:%M:%S%P", time.localtime(time.time())))
             # printlcd(0,1, "Ready to feed   ")
 
@@ -331,6 +340,8 @@ try:
             if buttonpressed(FEEDBUTTONPIN):
                 print("UDATE IN buttonpressed in 8 hours:")
                 print(UPDATE)
+                UPDATE = UPDATE + 1
+
                 lastFeed = feednow()
                 saveLastFeed()
 
@@ -338,6 +349,8 @@ try:
             elif remotefeedrequest():
                 print("UDATE IN remotefeedrequest in 8 hours:")
                 print(UPDATE)
+                UPDATE = UPDATE + 1
+                
                 lastFeed = feednow()
                 saveLastFeed()
 
