@@ -57,7 +57,7 @@ GMAILUSER = 'pets.feedersp17@gmail.com' # Insert your email username
 GMAILPASSWD = 'Spring17' # Insert your email password
 NEWMAIL_OFFSET = 0
 lastEmailCheck = time.time()
-MAILCHECKDELAY = 1  # Don't check email too often since Gmail will complain
+MAILCHECKDELAY = 10  # Don't check email too often since Gmail will complain
 
 # GPIO pins for feeder control
 MOTORCONTROLPIN = 19
@@ -366,8 +366,8 @@ try:
             #    lcd.clear()
             #    printlcd(0,0, "Not now, try at ")
             #    printlcd(0,1, time.strftime("%b/%d %H:%M", time.localtime(lastFeed + feedInterval)))
-                time.sleep(2)
-        time.sleep(.6)
+                time.sleep(.2)
+        time.sleep(.2)
 
 #### Cleaning up at the end
 except Exception as e:
