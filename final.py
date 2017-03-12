@@ -112,9 +112,9 @@ def checkmail():
                 for msg in whenMessages:
                     # msginfo = server.fetch([msg], ['BODY[HEADER.FIELDS (FROM)]'])
                     # fromAddress = str(msginfo[msg].get('BODY[HEADER.FIELDS (FROM)]')).split('<')[1].split('>')[0]
-                    typ, data = server.fetch(msg, '(RFC822)' )
+                    # typ, data = server.fetch(msg, '(RFC822)' )
 
-                    # fromAddress = GMAILUSER
+                    fromAddress = GMAILUSER
 
                     msgBody = "The last feeding was done on " + time.strftime("%b %d at %I:%M %P", time.localtime(lastFeed))
 
@@ -126,6 +126,10 @@ def checkmail():
                     sendemail(fromAddress, "Thanks for your feeding query", msgBody)
                     server.add_flags(whenMessages, [SEEN])
                     # server.store(msg, '+FLAGS', '\Seen')
+
+
+
+
 
             # See if there are any messages with subject "Feed" that are unread
             # feedMessages = server.search([u'UNSEEN', u'SUBJECT', u'Feed'])
@@ -151,9 +155,10 @@ def checkmail():
             # Respond to the feed messages and then exit
             if email_subject == "Feed":
                 for msg in feedMessages:
-                    msginfo = server.fetch([msg], ['BODY[HEADER.FIELDS (FROM)]'])
-                    fromAddress = str(msginfo[msg].get('BODY[HEADER.FIELDS (FROM)]')).split('<')[1].split('>')[0]
-                    # fromAddress = GMAILUSER
+                    # msginfo = server.fetch([msg], ['BODY[HEADER.FIELDS (FROM)]'])
+                    # fromAddress = str(msginfo[msg].get('BODY[HEADER.FIELDS (FROM)]')).split('<')[1].split('>')[0]
+
+                    fromAddress = GMAILUSER
                     msgBody = "The last feeding was done at " + time.strftime("%b %d at %I:%M %P", time.localtime(lastFeed))
                     if (time.time() - lastFeed) > feedInterval:
                         msgBody = msgBody + "\nReady to be fed, will be feeding Lucky shortly"
@@ -228,6 +233,7 @@ def feednow():
     global lastFeed
     global GMAILUSER
 
+    print ("we are in feednow()")
     # lcd.clear()
     # printlcd(0,0,"Feeding now.....")
     if MOTORON:
