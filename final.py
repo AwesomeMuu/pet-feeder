@@ -4,6 +4,9 @@
 # Author: Krish Sivakumar
 # Created Dec 2015
 #
+# Edited by: Muhannad Alnemer
+# On Mar 2016
+#
 # Program to automate on-demand pet feeding through the internet
 # Uses Raspberry Pi as a controller
 #
